@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition:ConnectorDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:definition="http://www.bonitasoft.org/ns/connector/definition/6.1">
+  <id>nuxeo-upload</id>
+  <version>1.0.0</version>
+  <input defaultValue="http://localhost:8080/nuxeo" mandatory="true" name="url" type="java.lang.String"/>
+  <input name="useSSO" type="java.lang.Boolean"/>
+  <input defaultValue="Administrator" mandatory="false" name="username" type="java.lang.String"/>
+  <input defaultValue="Administrator" name="password" type="java.lang.String"/>
+  <input mandatory="true" name="attachment" type="java.lang.String"/>
+  <input defaultValue="/default-domain/UserWorkspaces/Administrator" mandatory="true" name="path" type="java.lang.String"/>
+  <input defaultValue="myFile" mandatory="true" name="title" type="java.lang.String"/>
+  <input defaultValue="File" mandatory="true" name="type" type="java.lang.String"/>
+  <input name="properties" type="java.util.Map"/>
+  <page id="connection-configuration">
+    <widget xsi:type="definition:Text" id="username-widget" inputName="username"/>
+    <widget xsi:type="definition:Password" id="password-widget" inputName="password"/>
+    <widget xsi:type="definition:Text" id="url-widget" inputName="url"/>
+    <widget xsi:type="definition:Checkbox" id="useSSO-widget" inputName="useSSO"/>
+  </page>
+  <page id="document-configuration">
+    <widget xsi:type="definition:Text" id="attachment-widget" inputName="attachment"/>
+    <widget xsi:type="definition:Text" id="path-widget" inputName="path"/>
+    <widget xsi:type="definition:Text" id="title-widget" inputName="title"/>
+    <widget xsi:type="definition:Text" id="type-widget" inputName="type"/>
+  </page>
+  <page id="additional-properties">
+    <widget xsi:type="definition:Array" id="properties-widget" inputName="properties" cols="2" fixedCols="true">
+      <colsCaption>XPath</colsCaption>
+      <colsCaption>Value</colsCaption>
+    </widget>
+  </page>
+</definition:ConnectorDefinition>

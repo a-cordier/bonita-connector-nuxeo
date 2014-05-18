@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation:connectorImplementation xmlns:implementation="http://www.bonitasoft.org/ns/connector/implementation/6.0">
+
+	<definitionId>nuxeo-upload</definitionId>
+	<definitionVersion>$definition.version$</definitionVersion>
+	<description>Implementation based on Nuxeo automation client 5.8</description>
+	<implementationClassname>fr.univlille2.bpm.NuxeoUploadConnector</implementationClassname>
+	<implementationId>nuxeo-upload</implementationId>
+	<implementationVersion>$implementation.version$</implementationVersion>
+
+    $Dependencies$
+
+</implementation:connectorImplementation>
