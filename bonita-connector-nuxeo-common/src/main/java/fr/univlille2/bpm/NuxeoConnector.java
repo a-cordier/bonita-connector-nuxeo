@@ -1,23 +1,11 @@
 package fr.univlille2.bpm;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-import java.util.Collections;
+
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.bonitasoft.engine.connector.AbstractConnector;
 import org.bonitasoft.engine.connector.ConnectorException;
 import org.bonitasoft.engine.connector.ConnectorValidationException;
@@ -39,10 +27,10 @@ public abstract class NuxeoConnector extends AbstractConnector{
 
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
-		url = (String) parameters.get("url");
+		url = (String) parameters.get("url") + "/site/automation";
 		username = (String)parameters.get("username");
 		password = (String) parameters.get("password");
-		useSSO = Boolean.valueOf((String) parameters.get("useSSO"));		
+		useSSO = (Boolean)parameters.get("useSSO");		
 	}
 
 	@Override
@@ -56,8 +44,8 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	public void executeBusinessLogic() throws ConnectorException {
 		if(logger.isLoggable(Level.INFO)){
 			logger.info(String.format(
-					"Nuxeo connector is running with parameters {url:%s, username:%s, useSSO:%s",
-					url, username, useSSO));
+					"Nuxeo connector is running with parameters {url:%s, username:%s, password:%s, useSSO:%s",
+					url, username, password, useSSO));
 		}
 		HttpAutomationClient client = new HttpAutomationClient(url);		
 
@@ -65,13 +53,16 @@ public abstract class NuxeoConnector extends AbstractConnector{
 		 * If the so called SSO options is checked,
 		 * try to handle a shared secret authentication
 		 */
-
+	
 		try {
 			if(useSSO){
+				logger.info("1");
 				client.setRequestInterceptor(new PortalSSOAuthInterceptor(password, username));
 				
 			}else{
+				logger.info("2");
 				client.setBasicAuth(username, password);
+				logger.info("3");
 			}
 			final Session session  = client.getSession();
 			executeConnector(session);

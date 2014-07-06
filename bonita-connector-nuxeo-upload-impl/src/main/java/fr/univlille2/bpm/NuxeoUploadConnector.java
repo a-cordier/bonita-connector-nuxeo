@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bonitasoft.engine.api.ProcessAPI;
-import org.bonitasoft.engine.connector.ConnectorException;
+import org.bonitasoft.engine.api.ProcessAPI;import org.bonitasoft.engine.connector.ConnectorException;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.Document;
@@ -17,40 +16,39 @@ import org.nuxeo.ecm.automation.client.model.FileBlob;
 // TODO: write definition file
 public class NuxeoUploadConnector extends NuxeoConnector {
 	
-	private String fileObject;
+	private String attachment;
 	private String path;
 	private String title;
 	private String type;
-	private Map<String, String> properties;
+//	private ArrayList properties;
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
 		super.setInputParameters(parameters);
-		fileObject = (String) parameters.get("fileObject");
+		attachment = (String) parameters.get("attachment");
 		path = (String) parameters.get("path");
 		title = (String) parameters.get("title");
 		type = (String) parameters.get("type");
-		properties = (Map<String, String>) parameters.get("properties");
+	//	properties = (ArrayList) parameters.get("properties");
 	
 	}
 
 		
 	@Override
 	protected void executeConnector(final Session session) throws Exception {
-		if(logger.isLoggable(Level.INFO)){
-			logger.info("Starting nuxeo upload connector for file " + fileObject);
-		}
+		logger.info("Starting nuxeo upload connector for file " + attachment);
+		
 		
 		ProcessAPI processAPI = getAPIAccessor().getProcessAPI();
 		long processInstanceId = getExecutionContext().getProcessInstanceId();
-		
 		org.bonitasoft.engine.bpm.document.Document srcDocument = 
-				processAPI.getLastDocument(processInstanceId, this.fileObject);	
+				processAPI.getLastDocument(processInstanceId, this.attachment);	
+		
 		if(srcDocument==null){
-			throw new ConnectorException("Unable to retrieve process a attachment referenced by " + fileObject);
+			throw new ConnectorException("Unable to retrieve process a attachment referenced by " + attachment);
 		}		
 		final byte[] content = processAPI.getDocumentContent(srcDocument.getContentStorageId());
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
@@ -61,9 +59,10 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		
 		path = checkParentPath(path); // Correct path if user forgot the last file-separator
 		nxDocument.set("dc:title", title);
-		for(String xPath : properties.keySet()){
-			nxDocument.set(xPath, properties.get(xPath));
-		}
+//		for(Object o : properties){
+//			//nxDocument.set(xPath, properties.get(xPath));
+//			logger.warning(o.toString());
+//		}
 		nxDocument = documentService.createDocument(path, nxDocument);
 		
 		File tempFile = File.createTempFile(fileName, ".tmp");

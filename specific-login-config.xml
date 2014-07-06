@@ -1,0 +1,49 @@
+<component name="fr.univlille2.ecm.auth.sso.config">
+        
+<require>org.nuxeo.ecm.platform.ui.web.auth.defaultConfig</require>
+<require>org.nuxeo.ecm.platform.login.Portal</require>
+<require>org.nuxeo.ecm.automation.server.auth.config</require>
+<require>org.esup.ecm.login</require> 
+<require>org.nuxeo.ecm.platform.usermanager.UserManagerImpl</require>
+
+   <extension
+      target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
+      point="authenticators">
+      <authenticationPlugin
+              name="PORTAL_AUTH">
+       <loginModulePlugin>Trusting_LM</loginModulePlugin>
+       <parameters>
+         <!-- define here shared secret between the portal and Nuxeo server -->
+         <parameter name="secret">chocolate_wellfair</parameter>
+         <parameter name="maxAge">3600</parameter>
+       </parameters>
+      </authenticationPlugin>
+   </extension>
+ 
+<!-- RB : On surcharge ici la specificAuthenticationChain de org.nuxeo.ecm.automation.server.auth.config -->
+  <extension
+      target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
+      point="specificChains">
+ 
+    <specificAuthenticationChain name="Automation">
+        <urlPatterns>
+            <url>(.*)/automation.*</url>
+            <url>(.*)/cmis.*</url>
+            <url>(.*)/authentication/token.*</url>
+        </urlPatterns>
+
+
+        <replacementChain>
+<!--          <plugin>AUTOMATION_BASIC_AUTH</plugin>-->
+
+				<plugin>AUTOMATION_BASIC_AUTH</plugin>
+                                <plugin>TOKEN_AUTH</plugin>
+			        <plugin>PORTAL_AUTH</plugin>
+				<plugin>BASIC_AUTH</plugin>       
+	</replacementChain>
+
+    </specificAuthenticationChain>
+ 
+  </extension>
+ 
+</component>  

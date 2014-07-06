@@ -21,7 +21,7 @@
     <widget xsi:type="definition:Checkbox" id="useSSO-widget" inputName="useSSO"/>
   </page>
   <page id="document-configuration">
-    <widget xsi:type="definition:Text" id="attachment-widget" inputName="attachment"/>
+    <widget xsi:type="definition:Text" id="attachment-widget" inputName="attachment"  showDocuments="true"/>
     <widget xsi:type="definition:Text" id="path-widget" inputName="path"/>
     <widget xsi:type="definition:Text" id="title-widget" inputName="title"/>
     <widget xsi:type="definition:Text" id="type-widget" inputName="type"/>
