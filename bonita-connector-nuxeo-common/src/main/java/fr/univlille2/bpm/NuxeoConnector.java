@@ -44,8 +44,8 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	public void executeBusinessLogic() throws ConnectorException {
 		if(logger.isLoggable(Level.INFO)){
 			logger.info(String.format(
-					"Nuxeo connector is running with parameters {url:%s, username:%s, password:%s, useSSO:%s",
-					url, username, password, useSSO));
+					"Nuxeo connector is running with parameters {url:%s, username:%s, useSSO:%s",
+					url, username, useSSO));
 		}
 		HttpAutomationClient client = new HttpAutomationClient(url);		
 
@@ -56,13 +56,10 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	
 		try {
 			if(useSSO){
-				logger.info("1");
 				client.setRequestInterceptor(new PortalSSOAuthInterceptor(password, username));
 				
 			}else{
-				logger.info("2");
 				client.setBasicAuth(username, password);
-				logger.info("3");
 			}
 			final Session session  = client.getSession();
 			executeConnector(session);

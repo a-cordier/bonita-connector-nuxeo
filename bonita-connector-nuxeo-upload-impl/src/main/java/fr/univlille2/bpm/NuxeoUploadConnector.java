@@ -3,6 +3,7 @@ package fr.univlille2.bpm;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,11 +21,12 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 	private String path;
 	private String title;
 	private String type;
-//	private ArrayList properties;
+ 	@SuppressWarnings("rawtypes")
+	private ArrayList properties;
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
-//	@SuppressWarnings("unchecked")
+ 	@SuppressWarnings("rawtypes")
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
 		super.setInputParameters(parameters);
@@ -32,14 +34,15 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		path = (String) parameters.get("path");
 		title = (String) parameters.get("title");
 		type = (String) parameters.get("type");
-	//	properties = (ArrayList) parameters.get("properties");
+	 	properties = (ArrayList) parameters.get("properties");
 	
 	}
 
 		
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void executeConnector(final Session session) throws Exception {
-		logger.info("Starting nuxeo upload connector for file " + attachment);
+		logger.info("Starting nuxeo upload connector for document " + attachment);
 		
 		
 		ProcessAPI processAPI = getAPIAccessor().getProcessAPI();
@@ -50,22 +53,24 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		if(srcDocument==null){
 			throw new ConnectorException("Unable to retrieve process a attachment referenced by " + attachment);
 		}		
-		final byte[] content = processAPI.getDocumentContent(srcDocument.getContentStorageId());
+		final byte[] content = processAPI.getDocumentContent(srcDocument.getContentStorageId());		
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
-		String fileName=srcDocument.getContentFileName();
+		String fileName = srcDocument.getContentFileName();
 		String mimeType = srcDocument.getContentMimeType();
+		logger.info("Mime type: " + mimeType);
 		DocumentService documentService = session.getAdapter(DocumentService.class);
-		org.nuxeo.ecm.automation.client.model.Document nxDocument = new Document(fileName, type);
+		org.nuxeo.ecm.automation.client.model.Document nxDocument = new Document(title, type);
 		
 		path = checkParentPath(path); // Correct path if user forgot the last file-separator
 		nxDocument.set("dc:title", title);
-//		for(Object o : properties){
-//			//nxDocument.set(xPath, properties.get(xPath));
-//			logger.warning(o.toString());
-//		}
+		for(Object o : properties){
+			logger.info(o.getClass().getName());
+			ArrayList row = (ArrayList)o;
+		    nxDocument.set((String)row.get(0),(String)row.get(1));
+		}
 		nxDocument = documentService.createDocument(path, nxDocument);
 		
-		File tempFile = File.createTempFile(fileName, ".tmp");
+		File tempFile = new File(fileName);
 		FileOutputStream fos = new FileOutputStream(tempFile);
 
 		int data;
@@ -75,11 +80,9 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		}
 		fos.flush();
 		fos.close();
-		
-		FileBlob fileBlob = new FileBlob(tempFile);  
-		fileBlob.setFileName(fileName);
-		fileBlob.setMimeType(mimeType);
-		documentService.setBlob(nxDocument, fileBlob);
+		FileBlob blob = new FileBlob(tempFile); 
+		//StreamBlob blob = new StreamBlob(inputStream, fileName, mimeType);
+		documentService.setBlob(nxDocument, blob);
 		tempFile.delete();
 		documentService.update(nxDocument);
 		if(logger.isLoggable(Level.INFO)){
