@@ -19,7 +19,7 @@ public abstract class NuxeoConnector extends AbstractConnector{
 
 	private String username;
 	private String password;
-	private String url;
+	protected String url;
 	private boolean useSSO;
 
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -27,7 +27,7 @@ public abstract class NuxeoConnector extends AbstractConnector{
 
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
-		url = (String) parameters.get("url") + "/site/automation";
+		url = (String) parameters.get("url");
 		username = (String)parameters.get("username");
 		password = (String) parameters.get("password");
 		useSSO = (Boolean)parameters.get("useSSO");		
@@ -47,7 +47,8 @@ public abstract class NuxeoConnector extends AbstractConnector{
 					"Nuxeo connector is running with parameters {url:%s, username:%s, useSSO:%s",
 					url, username, useSSO));
 		}
-		HttpAutomationClient client = new HttpAutomationClient(url);		
+		String automationURL = String.format("%s/site/automation", url); 
+		HttpAutomationClient client = new HttpAutomationClient(automationURL);		
 
 		/*
 		 * If the so called SSO options is checked,

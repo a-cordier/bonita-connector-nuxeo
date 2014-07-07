@@ -18,7 +18,16 @@ import org.nuxeo.ecm.automation.client.model.StreamBlob;
  * NuxeoUploadConnector.java
  */
 public class NuxeoUploadConnector extends NuxeoConnector {
-
+	// inputs
+	public static final String ATTACHMENT = "attachment";
+	public static final String PATH = "path";
+	public static final String TITLE = "title";
+	public static final String TYPE = "type";
+	public static final String PROPERTIES = "properties";
+	// outputs
+	public static final String DOC_URL = "documentURL";
+	public static final String DOC_OBJECT = "documentObject";
+	
 	private String attachment;
 	private String path;
 	private String title;
@@ -32,11 +41,11 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
 		super.setInputParameters(parameters);
-		attachment = (String) parameters.get("attachment");
-		path = (String) parameters.get("path");
-		title = (String) parameters.get("title");
-		type = (String) parameters.get("type");
-		properties = (ArrayList<Object>) parameters.get("properties");
+		attachment = (String) parameters.get(ATTACHMENT);
+		path = (String) parameters.get(PATH);
+		title = (String) parameters.get(TITLE);
+		type = (String) parameters.get(TYPE);
+		properties = (ArrayList<Object>) parameters.get(PROPERTIES);
 
 	}
 
@@ -76,6 +85,10 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		StreamBlob blob = new StreamBlob(inputStream, fileName, mimeType);
 		documentService.setBlob(nxDocument, blob);
 		documentService.update(nxDocument);
+		String docURL = String.format("%s/nxdoc/default/%s/view_documents", url, nxDocument.getId());
+		// setting connector outputs
+		this.getOutputParameters().put(DOC_OBJECT, nxDocument);
+		this.getOutputParameters().put(DOC_URL, docURL);
 		
 		if(logger.isLoggable(Level.INFO)){
 			logger.info(String.format("File %s sent to %s", fileName, path));
