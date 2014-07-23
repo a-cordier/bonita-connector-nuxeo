@@ -4,27 +4,7 @@
   <version>1.0.0</version>
   <icon>nx.png</icon>
 
-	
-  <input defaultValue="http://localhost:8080/nuxeo" mandatory="true" name="url" type="java.lang.String"/>
-  <input name="useSSO" type="java.lang.Boolean"/>
-  <input defaultValue="Administrator" mandatory="false" name="username" type="java.lang.String"/>
-  <input defaultValue="Administrator" name="password" type="java.lang.String"/>
-  <input mandatory="true" name="attachment" type="java.lang.String"/>
-  <input defaultValue="/default-domain/UserWorkspaces/Administrator" mandatory="true" name="path" type="java.lang.String"/>
-  <input defaultValue="myFile" mandatory="true" name="title" type="java.lang.String"/>
-  <input defaultValue="File" mandatory="true" name="type" type="java.lang.String"/>
-  <input name="properties" type="java.util.Map"/>
-  
-  <output name="documentURL" type="java.lang.String" />
-  <output name="documentObject" type="org.nuxeo.ecm.automation.client.model.Document" />
-  
-  <page id="connection-configuration">
-    <widget xsi:type="definition:Text" id="username-widget" inputName="username"/>
-    <widget xsi:type="definition:Password" id="password-widget" inputName="password"/>
-    <widget xsi:type="definition:Text" id="url-widget" inputName="url"/>
-    <widget xsi:type="definition:Checkbox" id="useSSO-widget" inputName="useSSO"/>
-  </page>
-  <page id="document-configuration">
+
     <widget xsi:type="definition:Text" id="attachment-widget" inputName="attachment"  showDocuments="true"/>
     <widget xsi:type="definition:Text" id="path-widget" inputName="path"/>
     <widget xsi:type="definition:Text" id="title-widget" inputName="title"/>
