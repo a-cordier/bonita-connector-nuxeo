@@ -79,8 +79,8 @@
     <module>bonita-connector-nuxeo-common</module>
     <module>bonita-connector-nuxeo-upload-def</module>
     <module>bonita-connector-nuxeo-upload-impl</module>
-    <module>bonita-connector-nuxeo-mkdir-impl</module>
-    <module>bonita-connector-nuxeo-mkdir-def</module>
+    <module>bonita-connector-nuxeo-folder-def</module>
+    <module>bonita-connector-nuxeo-folder-impl</module>
   </modules>
   <build>
     <plugins>
