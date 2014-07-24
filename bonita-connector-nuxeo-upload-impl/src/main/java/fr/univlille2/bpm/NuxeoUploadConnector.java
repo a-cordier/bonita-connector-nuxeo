@@ -72,7 +72,7 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		DocumentService documentService = session.getAdapter(DocumentService.class);
 		org.nuxeo.ecm.automation.client.model.Document nxDocument = new Document(title, type);
 
-		path = checkParentPath(path); 
+		path = NuxeoConnectorUtils.trail(path); 
 		nxDocument.set("dc:title", title);
 		// additional metadata attachment
 		for(Object object : properties){
@@ -96,8 +96,5 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 	}
 
 
-	private static String checkParentPath(String path){
-		return path.charAt(path.length()-1)!='/'?path+"/":path;
-	}
 
 }

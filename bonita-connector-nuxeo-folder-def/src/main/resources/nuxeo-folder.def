@@ -9,11 +9,10 @@
   <input name="useSSO" type="java.lang.Boolean"/>
   <input defaultValue="Administrator" mandatory="false" name="username" type="java.lang.String"/>
   <input defaultValue="Administrator" name="password" type="java.lang.String"/>
-  <input mandatory="true" name="attachment" type="java.lang.String"/>
-  <input defaultValue="/default-domain/UserWorkspaces/Administrator" mandatory="true" name="path" type="java.lang.String"/>
-  <input defaultValue="myFile" mandatory="true" name="title" type="java.lang.String"/>
-  <input defaultValue="File" mandatory="true" name="type" type="java.lang.String"/>
-  <input name="properties" type="java.util.Map"/>
+  <input defaultValue="/default-domain/UserWorkspaces/Administrator/bonita" mandatory="true" name="path" type="java.lang.String"/>
+  <input name="create" type="java.lang.Boolean"/>
+  <input name="permissions" type="java.lang.String" defaultValue="READ" mandatory="true" />
+  <input name="usernames" type="java.util.List" mandatory="true" />
   
   <output name="documentURL" type="java.lang.String" />
   <output name="documentObject" type="org.nuxeo.ecm.automation.client.model.Document" />
@@ -26,12 +25,15 @@
   </page>
   <page id="document-configuration">
     <widget xsi:type="definition:Text" id="path-widget" inputName="path"/>
-    <widget xsi:type="definition:Checkbox" id="create-widget" inputName="createIfNotExists"/>
+    <widget xsi:type="definition:Checkbox" id="create-widget" inputName="create"/>
   </page>
-  <page id="additional-properties">
-    <widget xsi:type="definition:Array" id="properties-widget" inputName="properties" cols="2" fixedCols="true">
-      <colsCaption>XPath</colsCaption>
-      <colsCaption>Value</colsCaption>
-    </widget>
+  <page id="access-configuration">
+        <widget id="permissions-widget" inputName="permissions" xsi:type="definition:Select" readOnly="false">
+            <items>READ</items>
+            <items>READ_WRITE</items>
+            <items>EVERYTHING</items>
+        </widget>
+        <widget xsi:type="definition:Text" id="usernames-widget" inputName="usernames"/>
   </page>
+  
 </definition:ConnectorDefinition>

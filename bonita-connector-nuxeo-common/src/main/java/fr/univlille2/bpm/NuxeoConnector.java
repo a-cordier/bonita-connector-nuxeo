@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.bonitasoft.engine.connector.AbstractConnector;
 import org.bonitasoft.engine.connector.ConnectorException;
 import org.bonitasoft.engine.connector.ConnectorValidationException;
@@ -16,7 +15,7 @@ import org.nuxeo.ecm.automation.client.Session;
 
 
 public abstract class NuxeoConnector extends AbstractConnector{
-
+	
 	private String username;
 	private String password;
 	protected String url;
