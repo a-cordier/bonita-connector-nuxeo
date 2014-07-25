@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.nuxeo.ecm.automation.client.Session;
+import org.nuxeo.ecm.automation.client.adapters.DocumentService;
+import org.nuxeo.ecm.automation.client.model.Document;
 
 /**
  * @author acordier Jul 24, 2014
@@ -57,6 +59,26 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 		path = NuxeoConnectorUtils.unTrail(path);
 		String folderName = path.substring(path.lastIndexOf('/')+1);
 		String parentPath = path.substring(0, path.lastIndexOf(folderName));
+		// nuxeo document API call
+		DocumentService documentService = session.getAdapter(DocumentService.class);
+		try {
+			documentService.getDocument(path);	
+		} catch (Exception e) {
+			try {
+				if(create)
+					documentService.createDocument(parentPath,new Document(folderName, "Folder"));
+				else
+					logger.warning(String.format("Folder not found at %s on nuxeo repository", path));
+			} catch (Exception nested) {
+				logger.warning(String.format("Can not create document at %s, %s"
+						, path, nested.getMessage()));
+			}
+		}
+		
+		/*
+		 * TODO : set permissions
+		 */
+	
 	}
 	
 	public static String checkPath(String path){
