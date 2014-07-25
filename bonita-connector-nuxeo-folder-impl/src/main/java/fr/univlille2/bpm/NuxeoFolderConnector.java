@@ -4,7 +4,6 @@
 package fr.univlille2.bpm;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,12 +60,13 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 		String parentPath = path.substring(0, path.lastIndexOf(folderName));
 		// nuxeo document API call
 		DocumentService documentService = session.getAdapter(DocumentService.class);
+		Document folder = null;
 		try {
-			documentService.getDocument(path);	
+			folder = documentService.getDocument(path);	
 		} catch (Exception e) {
 			try {
 				if(create)
-					documentService.createDocument(parentPath,new Document(folderName, "Folder"));
+					folder = documentService.createDocument(parentPath,new Document(folderName, "Folder"));
 				else
 					logger.warning(String.format("Folder not found at %s on nuxeo repository", path));
 			} catch (Exception nested) {
@@ -74,14 +74,17 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 						, path, nested.getMessage()));
 			}
 		}
-		
 		/*
-		 * TODO : set permissions
+		 * set permissions
 		 */
-	
+		for(Object username: usernames){
+			try{
+				documentService.setPermission(folder, (String)username, permissions);
+			}catch(Exception e){
+				logger.warning(String.format("Can not set permission on document %s, to %s"
+						, path, username));
+			}
+		}
 	}
 	
-	public static String checkPath(String path){
-		return path.charAt(path.length()-1)=='/'?path.substring(0,path.length()-1):path;
-	}
 }
