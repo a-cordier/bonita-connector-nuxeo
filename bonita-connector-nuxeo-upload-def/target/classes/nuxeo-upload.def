@@ -3,6 +3,7 @@
   <id>nuxeo-upload</id>
   <version>1.0.0</version>
   <icon>nx.png</icon>
+	<category id="Nuxeo" icon="nx.png" />
 
 
   <input defaultValue="http://localhost:8080/nuxeo" mandatory="true" name="url" type="java.lang.String"/>

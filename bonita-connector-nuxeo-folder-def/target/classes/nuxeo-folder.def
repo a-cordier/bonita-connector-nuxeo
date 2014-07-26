@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition:ConnectorDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:definition="http://www.bonitasoft.org/ns/connector/definition/6.1">
-  <id>nuxeo-upload</id>
+  <id>nuxeo-folder</id>
   <version>1.0.0</version>
   <icon>nx.png</icon>
-
+  <category id="Nuxeo" icon="nx.png" />
 
   <input defaultValue="http://localhost:8080/nuxeo" mandatory="true" name="url" type="java.lang.String"/>
   <input name="useSSO" type="java.lang.Boolean"/>
   <input defaultValue="Administrator" mandatory="false" name="username" type="java.lang.String"/>
   <input defaultValue="Administrator" name="password" type="java.lang.String"/>
-  <input defaultValue="/default-domain/UserWorkspaces/Administrator/bonita" mandatory="true" name="path" type="java.lang.String"/>
+  <input defaultValue="/default-domain/UserWorkspaces/Administrator/Bonita" mandatory="true" name="path" type="java.lang.String"/>
   <input name="create" type="java.lang.Boolean"/>
-  <input name="permissions" type="java.lang.String" defaultValue="READ" mandatory="true" />
-  <input name="usernames" type="java.util.List" mandatory="true" />
+  <input name="permissions" type="java.lang.String" defaultValue="READ" />
+  <input name="usernames" type="java.util.List" />
   
   <output name="documentURL" type="java.lang.String" />
   <output name="documentObject" type="org.nuxeo.ecm.automation.client.model.Document" />
@@ -29,9 +29,9 @@
   </page>
   <page id="access-configuration">
         <widget id="permissions-widget" inputName="permissions" xsi:type="definition:Select" readOnly="false">
-            <items>READ</items>
-            <items>READ_WRITE</items>
-            <items>EVERYTHING</items>
+            <items>Read</items>
+            <items>ReadWrite</items>
+            <items>Everything</items>
         </widget>
         <widget xsi:type="definition:Text" id="usernames-widget" inputName="usernames"/>
   </page>

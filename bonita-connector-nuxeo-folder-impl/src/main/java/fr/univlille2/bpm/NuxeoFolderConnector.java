@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.univlille2.bpm;
 
 import java.util.ArrayList;
@@ -58,33 +55,41 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 		path = NuxeoConnectorUtils.unTrail(path);
 		String folderName = path.substring(path.lastIndexOf('/')+1);
 		String parentPath = path.substring(0, path.lastIndexOf(folderName));
-		// nuxeo document API call
-		DocumentService documentService = session.getAdapter(DocumentService.class);
-		Document folder = null;
+		DocumentService documentService = session.getAdapter(DocumentService.class);// Nuxeo document API call
+		Document folder = null;		
+		/* Get or create document
+		 */
 		try {
 			folder = documentService.getDocument(path);	
 		} catch (Exception e) {
 			try {
-				if(create)
+				if(create){
 					folder = documentService.createDocument(parentPath,new Document(folderName, "Folder"));
-				else
+					folder.set("dc:title", folderName);
+				    documentService.update(folder);
+			    }else
 					logger.warning(String.format("Folder not found at %s on nuxeo repository", path));
 			} catch (Exception nested) {
 				logger.warning(String.format("Can not create document at %s, %s"
 						, path, nested.getMessage()));
 			}
 		}
-		/*
-		 * set permissions
+		/*set permissions
 		 */
 		for(Object username: usernames){
 			try{
+				logger.info(String.format("Granting permissions %s to %S", permissions, username));
 				documentService.setPermission(folder, (String)username, permissions);
+				documentService.update(folder);
 			}catch(Exception e){
 				logger.warning(String.format("Can not set permission on document %s, to %s"
 						, path, username));
 			}
 		}
-	}
-	
+		/* setting connector outputs
+		 */
+		String docURL = String.format("%s/nxdoc/default/%s/view_documents", url, folder.getId());
+		this.getOutputParameters().put(DOC_OBJECT, folder);
+	    this.getOutputParameters().put(DOC_URL, docURL);
+	}	
 }

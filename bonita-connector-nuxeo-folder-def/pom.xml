@@ -6,12 +6,8 @@
     <artifactId>bonita-connector-nuxeo</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>fr.univlille2.bpm</groupId>
   <artifactId>bonita-connector-nuxeo-folder-def</artifactId>
   <version>1.0.0</version>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
   <build>
     <plugins>
       <plugin>

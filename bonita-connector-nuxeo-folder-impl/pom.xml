@@ -24,7 +24,7 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <artifactId>bonita-connector-nuxeo-upload-def</artifactId>
+      <artifactId>bonita-connector-nuxeo-folder-def</artifactId>
       <groupId>org.bonitasoft.connectors</groupId>
       <version>${definition.version}</version>
     </dependency>
