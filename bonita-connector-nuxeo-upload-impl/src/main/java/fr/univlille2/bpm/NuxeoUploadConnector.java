@@ -85,7 +85,7 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		StreamBlob blob = new StreamBlob(inputStream, fileName, mimeType);
 		documentService.setBlob(nxDocument, blob);
 		documentService.update(nxDocument);
-		String docURL = String.format("%s/nxdoc/default/%s/view_documents", url, nxDocument.getId());
+		String docURL = NuxeoConnectorUtils.getPermanentUrl(url, nxDocument);
 		// setting connector outputs
 		this.getOutputParameters().put(DOC_OBJECT, nxDocument);
 		this.getOutputParameters().put(DOC_URL, docURL);

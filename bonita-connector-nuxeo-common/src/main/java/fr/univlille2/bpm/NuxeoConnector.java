@@ -21,6 +21,7 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	protected String url;
 	private boolean useSSO;
 
+
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 
 

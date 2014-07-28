@@ -78,7 +78,7 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 		 */
 		for(Object username: usernames){
 			try{
-				logger.info(String.format("Granting permissions %s to %S", permissions, username));
+				logger.info(String.format("Granting permissions %s to %s", permissions, username));
 				documentService.setPermission(folder, (String)username, permissions);
 				documentService.update(folder);
 			}catch(Exception e){
@@ -88,7 +88,7 @@ public class NuxeoFolderConnector extends NuxeoConnector {
 		}
 		/* setting connector outputs
 		 */
-		String docURL = String.format("%s/nxdoc/default/%s/view_documents", url, folder.getId());
+		String docURL = NuxeoConnectorUtils.getPermanentUrl(url, folder);
 		this.getOutputParameters().put(DOC_OBJECT, folder);
 	    this.getOutputParameters().put(DOC_URL, docURL);
 	}	
