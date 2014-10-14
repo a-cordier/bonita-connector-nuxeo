@@ -12,7 +12,7 @@
   <input defaultValue="Administrator" name="password" type="java.lang.String"/>
   <input mandatory="true" name="attachment" type="java.lang.String"/>
   <input defaultValue="/default-domain/UserWorkspaces/Administrator" mandatory="true" name="path" type="java.lang.String"/>
-  <input defaultValue="myFile" mandatory="true" name="title" type="java.lang.String"/>
+  <input defaultValue="myFile" name="title" type="java.lang.String"/>
   <input defaultValue="File" mandatory="true" name="type" type="java.lang.String"/>
   <input name="properties" type="java.util.Map"/>
   

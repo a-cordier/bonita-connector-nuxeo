@@ -20,10 +20,8 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	private String password;
 	protected String url;
 	private boolean useSSO;
-
-
-	private Logger logger = Logger.getLogger(this.getClass().getName());
-
+	
+	protected static Logger logger = Logger.getLogger(NuxeoConnector.class.getName());
 
 	@Override
 	public void setInputParameters(final Map<String, Object> parameters) {
@@ -44,7 +42,7 @@ public abstract class NuxeoConnector extends AbstractConnector{
 	public void executeBusinessLogic() throws ConnectorException {
 		if(logger.isLoggable(Level.INFO)){
 			logger.info(String.format(
-					"Nuxeo connector is running with parameters {url:%s, username:%s, useSSO:%s",
+					"Nuxeo connector is running with parameters {url:%s, username:%s, useSSO:%s}",
 					url, username, useSSO));
 		}
 		String automationURL = String.format("%s/site/automation", url); 

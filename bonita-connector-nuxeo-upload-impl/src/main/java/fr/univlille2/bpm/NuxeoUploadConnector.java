@@ -34,7 +34,7 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 	private String type;
 	private ArrayList<Object> properties;
 
-	private Logger logger = Logger.getLogger(this.getClass().getName());
+	private Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 
 	@SuppressWarnings("unchecked")
@@ -61,24 +61,32 @@ public class NuxeoUploadConnector extends NuxeoConnector {
 		org.bonitasoft.engine.bpm.document.Document srcDocument = 
 				processAPI.getLastDocument(processInstanceId, this.attachment);			
 		if(srcDocument==null){
-			throw new ConnectorException("Unable to retrieve process a attachment referenced by " + attachment);
-		}			
+			throw new ConnectorException("Unable to retrieve attachment referenced by " + attachment);
+		}	
 		final byte[] content = processAPI.getDocumentContent(srcDocument.getContentStorageId());		
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
 		String fileName = srcDocument.getContentFileName();
 		String mimeType = srcDocument.getContentMimeType();
-
+		// use fileName if title is empty
+		title=(title==null||title.isEmpty())?srcDocument.getContentFileName():title;
+		
+		if(logger.isLoggable(Level.INFO)){
+			logger.info("Document is about to be sent to nuxeo");
+		}
+		
 		// nuxeo document API call
 		DocumentService documentService = session.getAdapter(DocumentService.class);
 		org.nuxeo.ecm.automation.client.model.Document nxDocument = new Document(title, type);
 
 		path = NuxeoConnectorUtils.trail(path); 
 		nxDocument.set("dc:title", title);
+		
 		// additional metadata attachment
 		for(Object object : properties){
 			ArrayList row = (ArrayList)object;
 			nxDocument.set((String)row.get(0),(String)row.get(1));
 		}
+		
 		// document creation
 		nxDocument = documentService.createDocument(path, nxDocument);
 		// blob attachment
